@@ -165,5 +165,18 @@ DIRECTION can be \"D\", \"L\", \"R\" or \"U\"."
   :initialization-options (lambda () ccls-initialization-options)
   :library-folders-fn ccls-library-folders-fn))
 
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-tramp-connection (lambda () (cons ccls-executable ccls-args)))
+  :major-modes '(c-mode c++-mode cuda-mode objc-mode)
+  :server-id 'ccls-remote
+  :remote? t
+  :multi-root nil
+  :notification-handlers
+  (lsp-ht ("$ccls/publishSkippedRanges" #'ccls--publish-skipped-ranges)
+          ("$ccls/publishSemanticHighlight" #'ccls--publish-semantic-highlight))
+  :initialization-options (lambda () ccls-initialization-options)
+  :library-folders-fn ccls-library-folders-fn))
+
 (provide 'ccls)
 ;;; ccls.el ends here
