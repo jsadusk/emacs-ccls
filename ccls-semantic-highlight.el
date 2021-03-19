@@ -246,7 +246,7 @@ If nil, disable semantic highlight."
   (when ccls-sem-highlight-method
     (-when-let* (((&CclsSemanticHighlight :uri :symbols) params)
                  (file (lsp--uri-to-path uri))
-                 (buffer (find-buffer-visiting file)))
+                 (buffer (get-file-buffer file)))
       (with-current-buffer buffer
         (with-silent-modifications
           (ccls--clear-sem-highlights)
@@ -301,7 +301,7 @@ If nil, disable semantic highlight."
   "Put overlays on (preprocessed) inactive regions according to PARAMS."
   (-let* (((&CclsSkippedRanges :uri :skipped-ranges) params)
           (file (lsp--uri-to-path uri)))
-   (-when-let (buffer (find-buffer-visiting file))
+   (-when-let (buffer (get-file-buffer file))
      (with-current-buffer buffer
        (with-silent-modifications
          (ccls--clear-skipped-ranges)
